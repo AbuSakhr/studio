@@ -1,0 +1,58 @@
+import type { Product } from '@/types';
+
+export const products: Product[] = [
+  {
+    id: '1',
+    name: 'Pro Productivity Suite',
+    description: 'A complete suite of tools to boost your productivity and streamline your workflow. Includes word processor, spreadsheet, and presentation software.',
+    price: 49.99,
+    currency: 'USD',
+    imageUrl: 'https://placehold.co/600x400.png',
+    category: 'Software',
+  },
+  {
+    id: '2',
+    name: 'Digital Art Masterclass',
+    description: 'Learn digital painting and illustration from industry professionals. Covers everything from basics to advanced techniques.',
+    price: 99.50,
+    currency: 'USD',
+    imageUrl: 'https://placehold.co/600x400.png',
+    category: 'Online Course',
+  },
+  {
+    id: '3',
+    name: 'Indie Game Gem',
+    description: 'An award-winning indie game with a captivating story and unique gameplay mechanics. Hours of fun guaranteed!',
+    price: 19.99,
+    currency: 'USD',
+    imageUrl: 'https://placehold.co/600x400.png',
+    category: 'Games',
+  },
+  {
+    id: '4',
+    name: 'Ultimate Font Pack',
+    description: 'A collection of 100+ premium fonts for designers and content creators. Perfect for web, print, and video projects.',
+    price: 29.00,
+    currency: 'USD',
+    imageUrl: 'https://placehold.co/600x400.png',
+    category: 'Digital Assets',
+  },
+  {
+    id: '5',
+    name: 'Lo-Fi Beats Collection',
+    description: 'Chill and relax with this exclusive collection of lo-fi hip hop beats. Perfect for studying, working, or unwinding.',
+    price: 15.00,
+    currency: 'USD',
+    imageUrl: 'https://placehold.co/600x400.png',
+    category: 'Music',
+  },
+  {
+    id: '6',
+    name: 'Sci-Fi Ebook Trilogy',
+    description: 'Embark on an epic space adventure with this bestselling sci-fi ebook trilogy. A must-read for fans of the genre.',
+    price: 25.99,
+    currency: 'USD',
+    imageUrl: 'https://placehold.co/600x400.png',
+    category: 'Ebooks',
+  },
+];
