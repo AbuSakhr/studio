@@ -1,7 +1,8 @@
+
 'use client';
 
 import type { Product, CartItem } from '@/types';
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { useToast } from "@/hooks/use-toast";
 
 export interface CartContextType {
@@ -27,7 +28,17 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   useEffect(() => {
     const storedCartItems = localStorage.getItem('cartItems');
     if (storedCartItems) {
-      setCartItems(JSON.parse(storedCartItems));
+      try {
+        const parsedItems = JSON.parse(storedCartItems);
+        if (Array.isArray(parsedItems)) {
+          setCartItems(parsedItems);
+        } else {
+          setCartItems([]);
+        }
+      } catch (error) {
+        console.error("Failed to parse cart items from localStorage", error);
+        setCartItems([]);
+      }
     }
   }, []);
 
@@ -35,7 +46,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product: Product) => {
+  const addToCart = useCallback((product: Product) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
@@ -49,18 +60,18 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
     });
-  };
+  }, [toast]);
 
-  const removeFromCart = (productId: string) => {
+  const removeFromCart = useCallback((productId: string) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
     toast({
       title: "Removed from cart",
       description: `Item has been removed from your cart.`,
       variant: "destructive"
     });
-  };
+  }, [toast]);
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = useCallback((productId: string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
     } else {
@@ -70,22 +81,32 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         )
       );
     }
-  };
+  }, [removeFromCart]);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCartItems([]);
-  };
+  }, []);
 
-  const getCartTotal = () => {
+  const getCartTotal = useCallback(() => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-  };
+  }, [cartItems]);
   
-  const getItemCount = () => {
+  const getItemCount = useCallback(() => {
     return cartItems.reduce((count, item) => count + item.quantity, 0);
-  };
+  }, [cartItems]);
+
+  const contextValue = React.useMemo(() => ({
+    cartItems,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    getCartTotal,
+    getItemCount
+  }), [cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getCartTotal, getItemCount]);
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getCartTotal, getItemCount }}>
+    <CartContext.Provider value={contextValue}>
       {children}
     </CartContext.Provider>
   );

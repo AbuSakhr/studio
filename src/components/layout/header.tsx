@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -8,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
 
 export default function Header() {
-  const { getItemCount } = useCart();
+  const { getItemCount, cartItems } = useCart(); // Destructure cartItems
   const [itemCount, setItemCount] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -20,7 +21,7 @@ export default function Header() {
     if (isMounted) {
       setItemCount(getItemCount());
     }
-  }, [getItemCount, isMounted, useCart().cartItems]); // Re-check when cartItems change
+  }, [getItemCount, isMounted, cartItems]); // Use destructured cartItems
 
   return (
     <header className="bg-card shadow-md sticky top-0 z-50">
